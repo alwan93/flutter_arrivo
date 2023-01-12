@@ -16,6 +16,9 @@ dependencies:
   flutter_bloc: ^8.1.1
   flutter_form_builder: 7.1.1
 
+  post_repository :
+    path: packages/post_repository
+
 
 dev_dependencies:
   flutter_test:

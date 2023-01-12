@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_arrivo/screens/cubit/post_cubit.dart';
 import 'package:flutter_arrivo/screens/data_table.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:post_repository/post_repository.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,8 +35,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final PostRepository postRepository = PostRepository();
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: DataTables());
+    return Scaffold(
+        body: BlocProvider(
+      create: (context) => PostCubit(postRepository)..fetchPosts(),
+      child: const DataTables(),
+    ));
   }
 }
