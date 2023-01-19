@@ -35,4 +35,14 @@ class PostCubit extends Cubit<PostState> {
       emit(const PostError(15));
     }
   }
+
+  Future<void> sendPost(Post newPost) async {
+    try {
+      Map<String, dynamic> result =
+          await _postRepository.submitPost(data: newPost);
+      print(result);
+    } catch (err) {
+      print(err);
+    }
+  }
 }

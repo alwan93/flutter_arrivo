@@ -42,4 +42,33 @@ class PostRepository {
       }
     }
   }
+
+  Future<Map<String, dynamic>> submitPost({required Post data}) async {
+    try {
+      Response<dynamic> response;
+      response = await _dio.post('$hostBaseUrl/posts', data: data.toJson());
+
+      if (response.data != null && response.statusCode == 201) {
+        final data = response.data;
+        return {'status': 'Success', 'data': response.data};
+      } else {
+        return {};
+      }
+    } on DioError catch (e) {
+      if (e.response != null) {
+        print(e.response?.data);
+        print(e.response?.headers);
+        print(e.response?.requestOptions);
+
+        if (e.response?.data?['error'] == 'Bad Request') {
+          throw Exception(e.message);
+        }
+        throw Exception('Something went wrong');
+      } else {
+        print(e.requestOptions);
+        print(e.message);
+        throw Exception('Received null from API');
+      }
+    }
+  }
 }

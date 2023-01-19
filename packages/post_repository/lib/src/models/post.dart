@@ -6,11 +6,12 @@ class Post extends Equatable {
   final String body;
   final int userID;
 
-  const Post(
-      {this.postID = 0,
-      this.title = '',
-      this.userID = 0,
-      this.body = '',});
+  const Post({
+    this.postID = 0,
+    this.title = '',
+    this.userID = 0,
+    this.body = '',
+  });
 
   static Post fromMap(Map<dynamic, dynamic> data) {
     return Post(

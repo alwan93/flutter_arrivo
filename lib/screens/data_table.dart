@@ -1,11 +1,13 @@
 import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_arrivo/widget/side_drawer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:post_repository/post_repository.dart';
 
 import '../util/debouncer.dart';
+import '../widget/on_hover.dart';
 import 'cubit/post_cubit.dart';
 
 class DataTables extends StatefulWidget {
@@ -30,6 +32,8 @@ class _DataTablesState extends State<DataTables> {
 
   final debouncer = Debouncer(milliseconds: 500);
 
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
+
   List<DataRow> dataRow(List<Post> posts) {
     return posts
         .map((post) => DataRow(cells: [
@@ -40,23 +44,25 @@ class _DataTablesState extends State<DataTables> {
               )),
               DataCell(Padding(
                 padding: const EdgeInsets.only(top: 8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(post.title,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xff706c83))),
-                    const Text(
-                      'example@mail.com',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12,
-                        color: Colors.grey,
-                      ),
-                    )
-                  ],
+                child: OnHover(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(post.title,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xff706c83))),
+                      const Text(
+                        'example@mail.com',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               )),
               DataCell(CircleAvatar(
@@ -73,9 +79,11 @@ class _DataTablesState extends State<DataTables> {
                       )))),
               DataCell(Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(
-                  post.body,
-                  style: const TextStyle(color: Color(0xff84818f)),
+                child: OnHover(
+                  child: Text(
+                    post.body,
+                    style: const TextStyle(color: Color(0xff84818f)),
+                  ),
                 ),
               )),
               DataCell(Container(
@@ -92,21 +100,27 @@ class _DataTablesState extends State<DataTables> {
               )),
               DataCell(Row(
                 children: [
-                  IconButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () {},
-                      icon: const Icon(Icons.send_outlined,
-                          size: 18, color: Color(0xff84818f))),
-                  IconButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () {},
-                      icon: const Icon(Icons.remove_red_eye_outlined,
-                          size: 18, color: Color(0xff84818f))),
-                  IconButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () {},
-                      icon: const Icon(Icons.more_vert,
-                          size: 18, color: Color(0xff84818f)))
+                  OnHover(
+                    child: IconButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () {},
+                        icon: const Icon(Icons.send_outlined,
+                            size: 18, color: Color(0xff84818f))),
+                  ),
+                  OnHover(
+                    child: IconButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () {},
+                        icon: const Icon(Icons.remove_red_eye_outlined,
+                            size: 18, color: Color(0xff84818f))),
+                  ),
+                  OnHover(
+                    child: IconButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () {},
+                        icon: const Icon(Icons.more_vert,
+                            size: 18, color: Color(0xff84818f))),
+                  )
                 ],
               )),
             ]))
@@ -153,6 +167,8 @@ class _DataTablesState extends State<DataTables> {
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
+      key: _key,
+      endDrawer: const SideDrawer(),
       backgroundColor: Colors.grey,
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -231,20 +247,25 @@ class _DataTablesState extends State<DataTables> {
                         SizedBox(
                           height: 37,
                           width: 120,
-                          child: TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor: Colors.black,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5.0)),
+                          child: OnHover(
+                            child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.black,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5.0)),
+                                  ),
                                 ),
-                              ),
-                              onPressed: () {},
-                              child: const Text('Add Record',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14))),
+                                onPressed: () {
+                                  // Scaffold.of(context).openEndDrawer();
+                                  _key.currentState!.openEndDrawer();
+                                },
+                                child: const Text('Add Record',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 14))),
+                          ),
                         )
                       ],
                     ),
